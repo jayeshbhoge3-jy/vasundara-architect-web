@@ -1,0 +1,856 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VastuResha Architects &amp; Interiors</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600&family=Archivo+Expanded:wght@500;600;700&family=Archivo:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#1C1A17;
+    --limestone:#F5F1EA;
+    --teak:#8B7355;
+    --graphite:#3A3835;
+    --brass:#C9A876;
+    --line: rgba(28,26,23,0.12);
+    --line-light: rgba(245,241,234,0.16);
+  }
+
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--limestone);
+    color:var(--ink);
+    font-family:'Archivo', sans-serif;
+    overflow-x:hidden;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    *{animation-duration:0.01ms !important; transition-duration:0.01ms !important;}
+  }
+
+  h1,h2,h3,.display{
+    font-family:'Fraunces', serif;
+    font-weight:500;
+    letter-spacing:-0.01em;
+  }
+
+  .eyebrow{
+    font-family:'Archivo Expanded', sans-serif;
+    font-weight:600;
+    text-transform:uppercase;
+    letter-spacing:0.18em;
+    font-size:0.72rem;
+    color:var(--teak);
+  }
+
+  a{color:inherit; text-decoration:none;}
+  img{display:block; max-width:100%;}
+
+  /* ===== JALI MOTIF (signature element) ===== */
+  .jali-bg{
+    position:absolute;
+    inset:0;
+    opacity:0.06;
+    pointer-events:none;
+    background-image:
+      radial-gradient(circle at 1px 1px, var(--ink) 1.4px, transparent 1.4px);
+    background-size: 26px 26px;
+  }
+  .jali-divider{
+    width:100%;
+    height:64px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:0;
+  }
+  .jali-divider svg{ height:100%; }
+
+  /* ===== NAV ===== */
+  header{
+    position:fixed;
+    top:0; left:0; right:0;
+    z-index:100;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:26px 6vw;
+    transition:background 0.4s ease, padding 0.4s ease, border-color 0.4s ease;
+    border-bottom:1px solid transparent;
+  }
+  header.scrolled{
+    background:rgba(245,241,234,0.92);
+    backdrop-filter:blur(10px);
+    padding:16px 6vw;
+    border-bottom:1px solid var(--line);
+  }
+  .logo{
+    font-family:'Fraunces', serif;
+    font-size:1.25rem;
+    font-weight:600;
+    letter-spacing:-0.01em;
+    display:flex;
+    align-items:center;
+    gap:10px;
+  }
+  .logo .mark{
+    width:30px; height:30px;
+    border:1.5px solid var(--ink);
+    border-radius:50%;
+    display:flex; align-items:center; justify-content:center;
+    flex-shrink:0;
+  }
+  .logo .mark svg{ width:16px; height:16px; }
+
+  nav ul{
+    display:flex;
+    gap:42px;
+    list-style:none;
+  }
+  nav a{
+    font-size:0.85rem;
+    font-weight:500;
+    position:relative;
+    padding-bottom:4px;
+  }
+  nav a::after{
+    content:'';
+    position:absolute;
+    left:0; bottom:0;
+    width:0; height:1px;
+    background:var(--ink);
+    transition:width 0.3s ease;
+  }
+  nav a:hover::after{ width:100%; }
+
+  .nav-cta{
+    font-size:0.8rem;
+    font-weight:600;
+    padding:10px 22px;
+    border:1px solid var(--ink);
+    border-radius:2px;
+    transition:background 0.3s ease, color 0.3s ease;
+    white-space:nowrap;
+  }
+  .nav-cta:hover{ background:var(--ink); color:var(--limestone); }
+
+  .nav-toggle{ display:none; }
+
+  /* ===== HERO ===== */
+  .hero{
+    min-height:100vh;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    position:relative;
+    padding:0 6vw;
+    padding-top:120px;
+  }
+  .hero-grid{
+    display:grid;
+    grid-template-columns:1.3fr 1fr;
+    gap:60px;
+    align-items:end;
+    position:relative;
+    z-index:2;
+  }
+  .hero-eyebrow{
+    display:flex;
+    align-items:center;
+    gap:14px;
+    margin-bottom:28px;
+    opacity:0;
+    animation:riseIn 0.9s ease 0.1s forwards;
+  }
+  .hero-eyebrow .dot{
+    width:7px; height:7px; border-radius:50%; background:var(--teak);
+  }
+  .hero h1{
+    font-size:clamp(2.8rem, 7vw, 6.2rem);
+    line-height:0.98;
+    color:var(--ink);
+    opacity:0;
+    animation:riseIn 1s ease 0.25s forwards;
+  }
+  .hero h1 em{
+    font-style:italic;
+    color:var(--teak);
+  }
+  .hero-sub{
+    align-self:end;
+    opacity:0;
+    animation:riseIn 1s ease 0.45s forwards;
+  }
+  .hero-sub p{
+    font-size:1.02rem;
+    line-height:1.65;
+    color:var(--graphite);
+    max-width:380px;
+    margin-bottom:28px;
+  }
+  .hero-meta{
+    display:flex;
+    gap:32px;
+    margin-top:0;
+  }
+  .hero-meta div{ }
+  .hero-meta .num{
+    font-family:'Fraunces', serif;
+    font-size:1.8rem;
+    font-weight:500;
+    color:var(--ink);
+    display:block;
+  }
+  .hero-meta .lbl{
+    font-size:0.72rem;
+    color:var(--graphite);
+    text-transform:uppercase;
+    letter-spacing:0.08em;
+  }
+
+  @keyframes riseIn{
+    from{ opacity:0; transform:translateY(22px); }
+    to{ opacity:1; transform:translateY(0); }
+  }
+
+  .scroll-cue{
+    position:absolute;
+    bottom:40px;
+    left:6vw;
+    display:flex;
+    align-items:center;
+    gap:10px;
+    font-size:0.72rem;
+    letter-spacing:0.1em;
+    text-transform:uppercase;
+    color:var(--graphite);
+    opacity:0.7;
+  }
+  .scroll-cue .line{
+    width:1px; height:34px;
+    background:var(--graphite);
+    position:relative;
+    overflow:hidden;
+  }
+  .scroll-cue .line::after{
+    content:'';
+    position:absolute;
+    top:0; left:0; width:100%; height:40%;
+    background:var(--ink);
+    animation:scrollDown 2s ease-in-out infinite;
+  }
+  @keyframes scrollDown{
+    0%{ top:-40%; } 100%{ top:100%; }
+  }
+
+  /* ===== SECTION SHELL ===== */
+  section{
+    position:relative;
+    padding:120px 6vw;
+  }
+  .section-head{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:40px;
+    margin-bottom:72px;
+    align-items:end;
+  }
+  .section-head h2{
+    font-size:clamp(2.1rem, 4vw, 3.2rem);
+    line-height:1.05;
+  }
+  .section-head .eyebrow{ margin-bottom:18px; display:block; }
+  .section-head p{
+    color:var(--graphite);
+    font-size:1rem;
+    line-height:1.7;
+    max-width:420px;
+    justify-self:end;
+  }
+
+  /* ===== ABOUT ===== */
+  .about{
+    background:var(--ink);
+    color:var(--limestone);
+  }
+  .about .section-head p{ color:rgba(245,241,234,0.72); }
+  .about .eyebrow{ color:var(--brass); }
+  .about-body{
+    display:grid;
+    grid-template-columns:0.9fr 1.1fr;
+    gap:80px;
+  }
+  .about-portrait{
+    position:relative;
+  }
+  .about-portrait .frame{
+    aspect-ratio:3/4;
+    border:1px solid var(--line-light);
+    position:relative;
+    overflow:hidden;
+    background:linear-gradient(160deg, #2b2823, #181613);
+  }
+  .about-portrait .frame .jali-bg{ opacity:0.1; }
+  .about-portrait .caption{
+    margin-top:18px;
+    display:flex;
+    justify-content:space-between;
+    font-size:0.78rem;
+    color:rgba(245,241,234,0.55);
+  }
+  .about-portrait .caption strong{
+    color:var(--limestone);
+    font-weight:500;
+    display:block;
+    font-size:0.95rem;
+    font-family:'Fraunces', serif;
+    margin-bottom:2px;
+  }
+  .about-text p{
+    font-size:1.15rem;
+    line-height:1.75;
+    color:rgba(245,241,234,0.85);
+    margin-bottom:24px;
+    font-family:'Fraunces', serif;
+    font-weight:300;
+  }
+  .about-text p:first-child{ font-size:1.35rem; }
+  .stat-row{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:30px;
+    margin-top:52px;
+    padding-top:36px;
+    border-top:1px solid var(--line-light);
+  }
+  .stat-row .num{
+    font-family:'Fraunces', serif;
+    font-size:2.6rem;
+    color:var(--brass);
+    display:block;
+    line-height:1;
+  }
+  .stat-row .lbl{
+    font-size:0.78rem;
+    color:rgba(245,241,234,0.6);
+    margin-top:8px;
+    line-height:1.4;
+  }
+
+  /* ===== SERVICES ===== */
+  .services-list{
+    border-top:1px solid var(--line);
+  }
+  .service-row{
+    display:grid;
+    grid-template-columns:90px 1fr 280px;
+    gap:30px;
+    align-items:center;
+    padding:38px 0;
+    border-bottom:1px solid var(--line);
+    position:relative;
+    transition:padding-left 0.4s ease;
+    cursor:default;
+  }
+  .service-row:hover{ padding-left:14px; }
+  .service-row .si{
+    font-family:'Fraunces', serif;
+    font-size:0.95rem;
+    color:var(--teak);
+  }
+  .service-row h3{
+    font-size:1.7rem;
+    font-weight:500;
+    transition:color 0.3s ease;
+  }
+  .service-row:hover h3{ color:var(--teak); }
+  .service-row p{
+    color:var(--graphite);
+    font-size:0.92rem;
+    line-height:1.6;
+  }
+
+  /* ===== PORTFOLIO ===== */
+  .portfolio{ background:#EFEAE0; }
+  .grid-gallery{
+    display:grid;
+    grid-template-columns:repeat(6, 1fr);
+    grid-template-rows:repeat(2, 340px);
+    gap:14px;
+  }
+  .g-item{
+    position:relative;
+    overflow:hidden;
+    border-radius:2px;
+  }
+  .g-item.g1{ grid-column:1/4; grid-row:1/3; }
+  .g-item.g2{ grid-column:4/7; grid-row:1/2; }
+  .g-item.g3{ grid-column:4/6; grid-row:2/3; }
+  .g-item.g4{ grid-column:6/7; grid-row:2/3; }
+
+  .g-item .ph{
+    position:absolute; inset:0;
+    background-size:cover;
+    background-position:center;
+    transition:transform 0.7s cubic-bezier(.22,1,.36,1);
+  }
+  .g-item:hover .ph{ transform:scale(1.06); }
+  .g-item .tag{
+    position:absolute;
+    left:18px; bottom:18px;
+    color:#fff;
+    z-index:2;
+  }
+  .g-item .tag .eyebrow{ color:var(--brass); margin-bottom:4px; }
+  .g-item .tag h4{
+    font-family:'Fraunces', serif;
+    font-size:1.3rem;
+    font-weight:500;
+  }
+  .g-item::after{
+    content:'';
+    position:absolute; inset:0;
+    background:linear-gradient(180deg, transparent 40%, rgba(0,0,0,0.65) 100%);
+    z-index:1;
+  }
+
+  /* ===== PROCESS ===== */
+  .process-strip{
+    background:var(--limestone);
+    border-top:1px solid var(--line);
+    border-bottom:1px solid var(--line);
+  }
+  .process-grid{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+  }
+  .process-step{
+    padding:48px 36px;
+    border-right:1px solid var(--line);
+    position:relative;
+  }
+  .process-step:last-child{ border-right:none; }
+  .process-step .pn{
+    font-family:'Fraunces', serif;
+    font-size:0.85rem;
+    color:var(--teak);
+    margin-bottom:22px;
+    display:block;
+  }
+  .process-step h4{
+    font-size:1.15rem;
+    margin-bottom:10px;
+    font-weight:500;
+  }
+  .process-step p{
+    font-size:0.88rem;
+    color:var(--graphite);
+    line-height:1.6;
+  }
+
+  /* ===== TESTIMONIAL ===== */
+  .testimonial{
+    text-align:center;
+    padding:140px 6vw;
+  }
+  .testimonial .stars{
+    color:var(--brass);
+    font-size:1.1rem;
+    letter-spacing:3px;
+    margin-bottom:36px;
+  }
+  .testimonial blockquote{
+    font-family:'Fraunces', serif;
+    font-weight:400;
+    font-style:italic;
+    font-size:clamp(1.5rem, 3vw, 2.3rem);
+    line-height:1.5;
+    max-width:780px;
+    margin:0 auto 32px;
+    color:var(--ink);
+  }
+  .testimonial .who{
+    font-size:0.9rem;
+    color:var(--graphite);
+  }
+  .testimonial .who strong{ color:var(--ink); }
+
+  /* ===== CONTACT ===== */
+  .contact{
+    background:var(--ink);
+    color:var(--limestone);
+  }
+  .contact-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:80px;
+  }
+  .contact-info .eyebrow{ color:var(--brass); margin-bottom:18px; display:block; }
+  .contact-info h2{
+    font-size:clamp(2.2rem, 4.5vw, 3.4rem);
+    line-height:1.08;
+    margin-bottom:30px;
+  }
+  .contact-info p{
+    color:rgba(245,241,234,0.7);
+    line-height:1.7;
+    max-width:380px;
+    margin-bottom:44px;
+  }
+  .contact-detail{
+    display:flex;
+    flex-direction:column;
+    gap:20px;
+    margin-bottom:20px;
+  }
+  .contact-detail .row{
+    display:flex;
+    align-items:baseline;
+    gap:16px;
+    padding-bottom:16px;
+    border-bottom:1px solid var(--line-light);
+  }
+  .contact-detail .row .k{
+    font-size:0.72rem;
+    text-transform:uppercase;
+    letter-spacing:0.1em;
+    color:rgba(245,241,234,0.5);
+    width:90px;
+    flex-shrink:0;
+  }
+  .contact-detail .row .v{
+    font-size:1rem;
+    color:var(--limestone);
+  }
+
+  .form-card{
+    background:rgba(245,241,234,0.04);
+    border:1px solid var(--line-light);
+    padding:44px;
+  }
+  .form-card h3{
+    font-size:1.3rem;
+    margin-bottom:28px;
+    font-weight:500;
+  }
+  .field{ margin-bottom:22px; }
+  .field label{
+    display:block;
+    font-size:0.72rem;
+    text-transform:uppercase;
+    letter-spacing:0.08em;
+    color:rgba(245,241,234,0.55);
+    margin-bottom:8px;
+  }
+  .field input, .field textarea{
+    width:100%;
+    background:transparent;
+    border:none;
+    border-bottom:1px solid var(--line-light);
+    color:var(--limestone);
+    font-family:'Archivo', sans-serif;
+    font-size:0.98rem;
+    padding:8px 0;
+    outline:none;
+    transition:border-color 0.3s ease;
+  }
+  .field input:focus, .field textarea:focus{ border-color:var(--brass); }
+  .field textarea{ resize:none; height:64px; }
+  .submit-btn{
+    width:100%;
+    padding:16px;
+    background:var(--brass);
+    color:var(--ink);
+    border:none;
+    font-family:'Archivo Expanded', sans-serif;
+    font-weight:600;
+    font-size:0.85rem;
+    text-transform:uppercase;
+    letter-spacing:0.08em;
+    cursor:pointer;
+    margin-top:10px;
+    transition:background 0.3s ease;
+  }
+  .submit-btn:hover{ background:#dcc090; }
+  .form-note{
+    font-size:0.78rem;
+    color:rgba(245,241,234,0.45);
+    margin-top:14px;
+    text-align:center;
+  }
+
+  /* ===== FOOTER ===== */
+  footer{
+    background:var(--ink);
+    color:rgba(245,241,234,0.5);
+    padding:32px 6vw;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    font-size:0.8rem;
+    border-top:1px solid var(--line-light);
+  }
+  footer .fmark{ color:rgba(245,241,234,0.75); }
+  footer .soc{ display:flex; gap:24px; }
+  footer .soc a:hover{ color:var(--brass); }
+
+  /* focus visibility */
+  a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visible{
+    outline:2px solid var(--brass);
+    outline-offset:2px;
+  }
+
+  /* ===== RESPONSIVE ===== */
+  @media (max-width: 900px){
+    nav ul{ display:none; }
+    .nav-toggle{ display:block; }
+    .hero-grid{ grid-template-columns:1fr; gap:34px; }
+    .hero-sub{ align-self:start; }
+    .section-head{ grid-template-columns:1fr; gap:18px; }
+    .section-head p{ justify-self:start; }
+    .about-body{ grid-template-columns:1fr; gap:40px; }
+    .stat-row{ grid-template-columns:repeat(3,1fr); gap:16px; }
+    .service-row{ grid-template-columns:50px 1fr; }
+    .service-row > p{ display:none; }
+    .grid-gallery{ grid-template-columns:1fr 1fr; grid-template-rows:repeat(4, 220px); }
+    .g-item.g1{ grid-column:1/3; grid-row:1/2; }
+    .g-item.g2{ grid-column:1/3; grid-row:2/3; }
+    .g-item.g3{ grid-column:1/2; grid-row:3/4; }
+    .g-item.g4{ grid-column:2/3; grid-row:3/4; }
+    .process-grid{ grid-template-columns:1fr 1fr; }
+    .process-step{ border-bottom:1px solid var(--line); }
+    .contact-grid{ grid-template-columns:1fr; gap:50px; }
+    section{ padding:80px 6vw; }
+    .form-card{ padding:30px; }
+  }
+  @media (max-width: 560px){
+    .stat-row{ grid-template-columns:1fr; gap:24px; }
+    .process-grid{ grid-template-columns:1fr; }
+    .process-step{ border-right:none; }
+    footer{ flex-direction:column; gap:14px; text-align:center; }
+  }
+</style>
+</head>
+<body>
+
+<header id="siteHeader">
+  <div class="logo">
+    <span class="mark">
+      <svg viewBox="0 0 24 24" fill="none"><path d="M12 2L3 7v2h18V7L12 2z" stroke="currentColor" stroke-width="1.3"/><path d="M5 11v9M9 11v9M15 11v9M19 11v9" stroke="currentColor" stroke-width="1.3"/><path d="M3 20h18" stroke="currentColor" stroke-width="1.3"/></svg>
+    </span>
+    VastuResha
+  </div>
+  <nav>
+    <ul>
+      <li><a href="#about">Studio</a></li>
+      <li><a href="#services">Services</a></li>
+      <li><a href="#portfolio">Work</a></li>
+      <li><a href="#process">Process</a></li>
+    </ul>
+  </nav>
+  <a href="#contact" class="nav-cta">Start a Project</a>
+</header>
+
+<!-- HERO -->
+<section class="hero" style="padding-bottom:60px;">
+  <div class="jali-bg"></div>
+  <div class="hero-grid">
+    <div>
+      <div class="hero-eyebrow">
+        <span class="dot"></span>
+        <span class="eyebrow">Architecture &amp; Interiors — Pune</span>
+      </div>
+      <h1>Spaces that<br>begin <em>life</em><br>again.</h1>
+    </div>
+    <div class="hero-sub">
+      <p>VastuResha designs homes and interiors led by Ar. Reshma Wanjari — where Vastu principles, material honesty, and modern form meet. Every project starts with how you'll actually live in it.</p>
+      <div class="hero-meta">
+        <div><span class="num">5+</span><span class="lbl">Years Practice</span></div>
+        <div><span class="num">4.9</span><span class="lbl">Client Rating</span></div>
+        <div><span class="num">60+</span><span class="lbl">Projects Built</span></div>
+      </div>
+    </div>
+  </div>
+  <div class="scroll-cue"><span class="line"></span> Scroll</div>
+</section>
+
+<!-- ABOUT -->
+<section class="about" id="about">
+  <div class="section-head">
+    <div>
+      <span class="eyebrow">The Studio</span>
+      <h2>Design rooted in Vastu, built for modern living.</h2>
+    </div>
+    <p>A boutique architecture and interiors practice based in Chinchwad, Pune — working across residential, interior, and Vastu consultation projects.</p>
+  </div>
+  <div class="about-body">
+    <div class="about-portrait">
+      <div class="frame"><div class="jali-bg"></div></div>
+      <div class="caption">
+        <div><strong>Ar. Reshma Wanjari</strong>Principal Architect &amp; Founder</div>
+        <div style="text-align:right;">Pune,<br>Maharashtra</div>
+      </div>
+    </div>
+    <div class="about-text">
+      <p>"One of the great beauties of architecture and interiors is that each time, it is like life starting over again — a new site, a new family, a new way of living."</p>
+      <p>VastuResha was founded to bridge traditional Vastu Shastra principles with contemporary architectural design — creating homes that feel right both on paper and in practice. From single residences to full interior fit-outs, every brief is treated as its own story.</p>
+      <div class="stat-row">
+        <div><span class="num">37</span><span class="lbl">Five-star Google reviews</span></div>
+        <div><span class="num">4</span><span class="lbl">Core service lines</span></div>
+        <div><span class="num">100%</span><span class="lbl">Vastu-aligned design</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section id="services">
+  <div class="section-head">
+    <div>
+      <span class="eyebrow">What We Do</span>
+      <h2>Four disciplines, one studio.</h2>
+    </div>
+    <p>From the first floor plan to the last light fixture — VastuResha carries a project end to end.</p>
+  </div>
+  <div class="services-list">
+    <div class="service-row">
+      <span class="si">01</span>
+      <h3>Architecture</h3>
+      <p>Residential &amp; commercial design, from concept to construction drawings.</p>
+    </div>
+    <div class="service-row">
+      <span class="si">02</span>
+      <h3>Interior Design</h3>
+      <p>Space planning, material selection, and full interior execution.</p>
+    </div>
+    <div class="service-row">
+      <span class="si">03</span>
+      <h3>Vastu Consultation</h3>
+      <p>Traditional Vastu Shastra guidance integrated into modern layouts.</p>
+    </div>
+    <div class="service-row">
+      <span class="si">04</span>
+      <h3>Construction</h3>
+      <p>On-site execution and project management through to handover.</p>
+    </div>
+  </div>
+</section>
+
+<!-- PORTFOLIO -->
+<section class="portfolio" id="portfolio">
+  <div class="section-head">
+    <div>
+      <span class="eyebrow">Selected Work</span>
+      <h2>Recent builds.</h2>
+    </div>
+    <p>A studio sample — swap in your real project photography here.</p>
+  </div>
+  <div class="grid-gallery">
+    <div class="g-item g1">
+      <div class="ph" style="background:linear-gradient(155deg,#9a9587,#5b574d);"></div>
+      <div class="tag"><span class="eyebrow">Residential</span><h4>Jali Facade Residence</h4></div>
+    </div>
+    <div class="g-item g2">
+      <div class="ph" style="background:linear-gradient(155deg,#bdb6a4,#7d7867);"></div>
+      <div class="tag"><span class="eyebrow">Interior</span><h4>Living Room Fit-out</h4></div>
+    </div>
+    <div class="g-item g3">
+      <div class="ph" style="background:linear-gradient(155deg,#7c7567,#42403a);"></div>
+      <div class="tag"><span class="eyebrow">Vastu</span><h4>North-facing Villa</h4></div>
+    </div>
+    <div class="g-item g4">
+      <div class="ph" style="background:linear-gradient(155deg,#a39c8c,#65604f);"></div>
+      <div class="tag"><span class="eyebrow">Commercial</span><h4>Studio Office</h4></div>
+    </div>
+  </div>
+</section>
+
+<!-- PROCESS -->
+<section class="process-strip" id="process" style="padding-top:90px; padding-bottom:90px;">
+  <div class="section-head" style="margin-bottom:50px;">
+    <div>
+      <span class="eyebrow">How We Work</span>
+      <h2>From brief to handover.</h2>
+    </div>
+  </div>
+  <div class="process-grid">
+    <div class="process-step">
+      <span class="pn">01</span>
+      <h4>Site &amp; Brief</h4>
+      <p>Site visit, Vastu reading, and a conversation about how you live and what you need.</p>
+    </div>
+    <div class="process-step">
+      <span class="pn">02</span>
+      <h4>Design</h4>
+      <p>Concept layouts, 3D walkthroughs, and material boards for your sign-off.</p>
+    </div>
+    <div class="process-step">
+      <span class="pn">03</span>
+      <h4>Execution</h4>
+      <p>Construction drawings handed to site, with regular progress reviews.</p>
+    </div>
+    <div class="process-step">
+      <span class="pn">04</span>
+      <h4>Handover</h4>
+      <p>Final walkthrough, finishing touches, and the keys to your new space.</p>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIAL -->
+<section class="testimonial">
+  <div class="stars">★★★★★</div>
+  <blockquote>"Reshma understood exactly what we wanted before we could fully explain it. The home feels like us — and the Vastu guidance gave my parents real peace of mind."</blockquote>
+  <div class="who"><strong>Sample client quote</strong> — replace with a real review from your 37 five-star ratings</div>
+</section>
+
+<!-- CONTACT -->
+<section class="contact" id="contact">
+  <div class="contact-grid">
+    <div class="contact-info">
+      <span class="eyebrow">Get In Touch</span>
+      <h2>Let's start your project.</h2>
+      <p>Tell us about your site, your timeline, and how you want to live in the space. We'll get back within a day.</p>
+      <div class="contact-detail">
+        <div class="row"><span class="k">Studio</span><span class="v">Shahunagar, MIDC, Chinchwad, Pimpri-Chinchwad</span></div>
+        <div class="row"><span class="k">Phone</span><span class="v">+91 XXXXX XXXXX</span></div>
+        <div class="row"><span class="k">Email</span><span class="v">hello@vasturesha.com</span></div>
+        <div class="row"><span class="k">Instagram</span><span class="v">@vasturesha_architects</span></div>
+      </div>
+    </div>
+    <div class="form-card">
+      <h3>Send a brief</h3>
+      <form onsubmit="event.preventDefault(); this.querySelector('.submit-btn').textContent='Sent — we\'ll reply soon';">
+        <div class="field"><label>Name</label><input type="text" placeholder="Your full name" required></div>
+        <div class="field"><label>Phone / Email</label><input type="text" placeholder="How can we reach you" required></div>
+        <div class="field"><label>Project Type</label><input type="text" placeholder="e.g. New home, Interior, Vastu consult"></div>
+        <div class="field"><label>About your project</label><textarea placeholder="Site location, size, timeline..."></textarea></div>
+        <button class="submit-btn" type="submit">Send Brief</button>
+      </form>
+      <div class="form-note">Demo form — connects to email/WhatsApp on launch.</div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="fmark">VastuResha Architects &amp; Interiors © 2026</div>
+  <div class="soc">
+    <a href="#">Instagram</a>
+    <a href="#">WhatsApp</a>
+    <a href="#">Google Maps</a>
+  </div>
+</footer>
+
+<script>
+  const header = document.getElementById('siteHeader');
+  window.addEventListener('scroll', () => {
+    header.classList.toggle('scrolled', window.scrollY > 40);
+  });
+</script>
+
+</body>
+</html>
